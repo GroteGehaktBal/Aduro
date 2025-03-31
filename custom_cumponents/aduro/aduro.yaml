@@ -1,18 +1,91 @@
+utility_meter:
+  aduro_consumed_amount_of_pellets:
+    source: sensor.aduro_h2_consumption_day
+    always_available: true
+
+counter:
+    aduro_pellets_refill_counter:
+    name: Aduro Pellets Refill Counter
+    initial: 0
+    step: 1
+    
+timer:
+  aduro_timer_startup_1:
+    duration: "00:15:00"
+
+  aduro_timer_startup_2:
+    duration: "00:15:00"
+
+input_boolean:
+  aduro_start_stop:
+    name: Aduro start
+    icon: mdi:fireplace
+
+  aduro_toggle_heat_target:
+    name: Aduro toggle heat target
+
+  aduro_shut_down_at_specific_pellets_level:
+    name: Aduro shut down at specific pellets level
+
+input_number:
+  aduro_heatlevel:
+    name: Aduro heatlevel
+    min: 1
+    max: 3
+    step: 1
+
+  aduro_boiler_ref:
+    name: Aduro boiler ref
+    min: 5
+    max: 35
+    step: 1
+
+  aduro_capacity_pellets:
+    name: Aduro capacity pellets
+    min: 9
+    max: 10
+    step: 0.1
+
+  aduro_notification_pellets_level:
+    name: Aduro notifications pellets level
+    min: 0
+    max: 20
+    step: 1
+
+  aduro_shut_down_pellets_level:
+    name: Aduro shut down pellets level
+    min: -10
+    max: 15
+    step: 1
+
+  aduro_operation_mode_target_2:
+    name: Aduro operation mode target 2
+    min: 0
+    max: 2
+    step: 1
+
+input_button:
+  aduro_stove_refilled:
+    name: Aduro stove refilled
+
+  aduro_stove_cleaned:
+    name: Aduro stove cleaned
+
 template:
   - sensor:
       - name: "Aduro amount of pellets in stove"
         unit_of_measurement: "Kg"
-        state: "{{ states('input_number.aduro_capacity_pellets') | float - states('sensor.aduro_forbrukad_mangd_pellets') | round(1) }}"
+        state: "{{ states('input_number.aduro_capacity_pellets') | float - states('sensor.aduro_consumed_amount_of_pellets') | round(1) }}"
 
   - sensor:
       - name: "Aduro percentage pellets in stove"
         unit_of_measurement: "%"
         state: >-
           {% if is_number(states('input_number.aduro_capacity_pellets')) and 
-                is_number(states('sensor.aduro_forbrukad_mangd_pellets')) and 
+                is_number(states('sensor.aduro_consumed_amount_of_pellets')) and 
                 states('input_number.aduro_capacity_pellets') | float > 0 %}
             {{ ((( states('input_number.aduro_capacity_pellets') | float - 
-                   states('sensor.aduro_forbrukad_mangd_pellets') | float ) / 
+                   states('sensor.aduro_consumed_amount_of_pellets') | float ) / 
                  states('input_number.aduro_capacity_pellets') | float ) * 100) | round(0) }}
           {% else %}
             unknown
@@ -79,7 +152,7 @@ template:
             Ved
           {% endif %}
 
-  # New sensor for tracking mode transition
+
   - sensor:
       - name: "Aduro mode transition"
         state: >
@@ -93,7 +166,7 @@ template:
             idle
           {% endif %}
 
-  # Updated change in progress sensor
+
   - sensor:
       - name: "Aduro change in progress"
         state: >
@@ -111,28 +184,30 @@ template:
             false
           {% endif %}
 
+ # sensor to handle operation mode target during transition
   - sensor:
       - name: aduro_operation_mode_target
         state: >-
           {%- set op_mode = states('sensor.aduro_h2_operation_mode') | default('', true) -%}
           {%- set toggle_active = states('input_boolean.aduro_toggle_heat_target') == 'on' -%}
 
-          {%- if op_mode == '' -%}
-            0
+          {%- if op_mode == '' or op_mode == 'unknown' or op_mode == 'unavailable' -%}
+            3
           {%- elif toggle_active -%}
             {%- if op_mode == '0' -%}
               1
             {%- elif op_mode == '1' -%}
               0
             {%- else -%}
-              {{ op_mode }}
+                {{ op_mode | int(op_mode) }}
             {%- endif -%}
           {%- else -%}
-            {{ op_mode }}
+            {{ op_mode | int(op_mode) }}
           {%- endif -%}
         unit_of_measurement: "mode"
         state_class: measurement
 
+ # sensor to handle operation temperature/heatlevel target during transition
   - sensor:
       - name: aduro_display_target
         state: >-
@@ -176,7 +251,7 @@ template:
           {% set level_map = {1: 'I', 2: 'II', 3: 'III'} %}
           {{ level_map.get(heat_level, heat_level) }}
 
-  # New sensor to handle display formatting based on operation mode target
+  # sensor to handle display formatting based on operation mode target
   - sensor:
       - name: aduro_display_format
         state: >-
@@ -254,6 +329,7 @@ template:
             target:
               entity_id: input_boolean.aduro_toggle_heat_target
 
+  # Displays text for each state. Needs to be updated with all possible states.
 sensor:
   - platform: template
     sensors:
@@ -287,6 +363,7 @@ sensor:
             "{{ 'sensor.aduro_h2_state' }}"
           {% endif %}
 
+  # Displays text for each state. Needs to be updated with all possible states.
   - platform: template
     sensors:
       aduro_mode_status_sub:
@@ -325,77 +402,17 @@ sensor:
             "{{ 'sensor.aduro_h2_state' }}"
           {% endif %}
 
-counter:
-    aduro_pellets_refill_counter:
-    name: Aduro Pellets Refill Counter
-    initial: 0
-    step: 1
-    
-timer:
-  aduro_timer_startup_1:
-    duration: "00:15:00"
+  - platform: derivative
+    source: sensor.aduro_percentage_pellets_in_stove
+    name: Aduro Consumption Pellets
+    round: 1
+    unit_time: h
+    time_window: "01:00:00"
 
-  aduro_timer_startup_2:
-    duration: "00:15:00"
-
-input_boolean:
-  aduro_start_stop:
-    name: Aduro start
-    icon: mdi:fireplace
-
-  aduro_toggle_heat_target:
-    name: Aduro toggle heat target
-
-  aduro_shut_down_at_specific_pellets_level:
-    name: Aduro shut down at specific pellets level
-
-input_number:
-  aduro_heatlevel:
-    name: Aduro heatlevel
-    min: 1
-    max: 3
-    step: 1
-
-  aduro_boiler_ref:
-    name: Aduro boiler ref
-    min: 5
-    max: 35
-    step: 1
-
-  aduro_capacity_pellets:
-    name: Aduro capacity pellets
-    min: 9
-    max: 10
-    step: 0.1
-
-  aduro_notification_pellets_level:
-    name: Aduro notifications pellets level
-    min: 0
-    max: 20
-    step: 1
-
-  aduro_shut_down_pellets_level:
-    name: Aduro shut down pellets level
-    min: -10
-    max: 15
-    step: 1
-
-  aduro_operation_mode_target_2:
-    name: Aduro operation mode target 2
-    min: 0
-    max: 2
-    step: 1
-
-input_button:
-  aduro_kamin_pafylld:
-    name: Aduro kamin påfylld
-
-  aduro_kamin_rengjord:
-    name: Aduro kamin rengjord
 
 automation:
-  - id: "aduro_mqtt_anrop"
-    alias: "Aduro MQTT anrop"
+  - id: "aduro_mqtt_call"
+    alias: "Aduro MQTT call"
     triggers:
       - trigger: time_pattern
         seconds: 20
@@ -405,7 +422,7 @@ automation:
     mode: single
 
   - id: "aduro_trigger_start_script"
-    alias: "Aduro start script"
+    alias: "Aduro trigger start script"
     mode: single
     triggers:
       - trigger: state
@@ -417,10 +434,10 @@ automation:
       - action: script.pyduro_start
       - action: automation.trigger
         target:
-          entity_id: automation.aduro_mqtt_anrop_trigger
+          entity_id: automation.aduro_mqtt_call_trigger
 
   - id: "aduro_trigger_stop_script"
-    alias: "Aduro stop script"
+    alias: "Aduro trigger stop script"
     mode: single
     triggers:
       - trigger: state
@@ -432,7 +449,7 @@ automation:
       - action: script.pyduro_stop
       - action: automation.trigger
         target:
-          entity_id: automation.aduro_mqtt_anrop_trigger
+          entity_id: automation.aduro_mqtt_call_trigger
 
   - id: "aduro_trigger_set_heatlevel"
     alias: "Aduro trigger set heatlevel"
@@ -451,7 +468,7 @@ automation:
       - action: script.pyduro_set_heatlevel
       - action: automation.trigger
         target:
-          entity_id: automation.aduro_mqtt_anrop_trigger
+          entity_id: automation.aduro_mqtt_call_trigger
     mode: parallel
     max: 10
 
@@ -476,12 +493,12 @@ automation:
       - action: script.pyduro_set_operation_mode_temp
       - action: automation.trigger
         target:
-          entity_id: automation.aduro_mqtt_anrop_trigger
+          entity_id: automation.aduro_mqtt_call_trigger
     mode: parallel
     max: 10
 
-  - id: "aduro_mqtt_anrop_trigger"
-    alias: "Aduro mqtt anrop trigger"
+  - id: "aduro_mqtt_call_trigger"
+    alias: "Aduro mqtt call trigger"
     mode: queued
     triggers: []
     actions:
@@ -491,12 +508,12 @@ automation:
             - delay: 5
             - service: automation.trigger
               target:
-                entity_id: automation.aduro_mqtt_anrop
+                entity_id: automation.aduro_mqtt_call
       - service: automation.turn_off
         target:
-          entity_id: automation.aduro_mqtt_anrop_trigger
+          entity_id: automation.aduro_mqtt_call_trigger
 
-  #Turns of input_boolean.aduro_start_stop when aduro stops. Needs to be updated with all possible states.
+  #Turns off input_boolean.aduro_start_stop when aduro stops. Needs to be updated with all possible states.
   - id: "aduro_boolean_auto_turn_off"
     alias: "Aduro boolean auto turn off"
     mode: single
@@ -526,11 +543,74 @@ automation:
             entity_id: sensor.aduro_h2_state
             state: "9"
     actions:
+      - action: automation.turn_off
+        target:
+          entity_id: automation.aduro_trigger_stop_script
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
       - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.aduro_start_stop
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - action: automation.turn_on
+        target:
+          entity_id: automation.aduro_trigger_stop_script
 
-  # This automation will update the boiler_ref input_number when the stove value changes
+  #Turns on input_boolean.aduro_start_stop when aduro starts. Needs to be updated with all possible states.
+  - id: "aduro_boolean_auto_turn_on"
+    alias: "Aduro boolean auto turn on"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.aduro_h2_state
+    conditions:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: sensor.aduro_h2_state
+            state: "0"
+          - condition: state
+            entity_id: sensor.aduro_h2_state
+            state: "2"
+          - condition: state
+            entity_id: sensor.aduro_h2_state
+            state: "4"
+          - condition: state
+            entity_id: sensor.aduro_h2_state
+            state: "5"
+          - condition: state
+            entity_id: sensor.aduro_h2_state
+            state: "32"
+    actions:
+      - action: automation.turn_off
+        target:
+          entity_id: automation.aduro_trigger_start_script
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.aduro_start_stop
+      - dealay:
+          hours: 0
+          minutes: 0
+          seconds: 2
+          milliseconds: 0
+      - action: automation.turn_on
+        target:
+          entity_id: automation.aduro_trigger_start_script
+
+  # This automation will update the boiler_ref input_number when the stove value changes.
   - id: "aduro_sync_boiler_ref_from_stove"
     alias: Aduro sync boiler ref from stove
     mode: single
@@ -637,37 +717,37 @@ automation:
           entity_id: automation.aduro_trigger_set_heatlevel
 
   - id: "aduro_update_sensors_pellets_refill"
-    alias: "Aduro uppdatera sensor för tom kamin"
+    alias: "Aduro uppdate sensor för empty stove"
     mode: single
     triggers:
       - trigger: state
         entity_id:
-          - input_button.aduro_kamin_pafylld
+          - input_button.aduro_stove_refilled
     conditions: []
     actions:
       - action: utility_meter.calibrate
         data:
           value: "0"
         target:
-          entity_id: sensor.aduro_forbrukad_mangd_pellets
+          entity_id: sensor.aduro_consumed_amount_of_pellets
       - action: counter.increment
         target:
           entity_id: counter.aduro_pellets_refill_counter
 
-  - id: "aduro_reset_rengjord_counter"
-    alias: "Aduro återställ counter rengörning"
+  - id: "aduro_reset_cleaned_counter"
+    alias: "Aduro reset counter cleaned"
     mode: single
     triggers:
       - trigger: state
         entity_id:
-          - input_button.aduro_kamin_rengjord
+          - input_button.aduro_stove_cleaned
     conditions: []
     actions:
       - action: counter.reset
         target:
           entity_id: counter.aduro_pellets_refill_counter
 
-  # New automation to update the mode transition sensor
+  # Automation to update the mode transition sensor
   - id: "aduro_track_operation_mode_change"
     alias: "Aduro track operation mode change"
     mode: single
@@ -692,7 +772,7 @@ automation:
         target:
           entity_id: sensor.aduro_change_in_progress
 
-  # New automation to reset toggle heat target after timeout
+  # Automation to reset toggle heat target after timeout
   - id: "aduro_reset_toggle_heat_target"
     alias: "Aduro reset toggle heat target"
     mode: single
@@ -741,61 +821,6 @@ automation:
       - action: timer.start
         target:
           entity_id: timer.aduro_timer_startup_2
-
-  - id: "aduro_notification_low_on_pellets"
-    alias: "Aduro Notifications low on pellets"
-    mode: single
-    trigger:
-      - platform: numeric_state
-        entity_id: sensor.aduro_percentage_pellets_in_stove
-        below: input_number.aduro_notification_pellets_level
-    conditions:
-      - condition: template
-        value_template: "{{ states('sensor.aduro_percentage_pellets_in_stove') != 'unknown' }}"
-    actions:
-      - action: script.actionable_notify
-        data:
-          who: all
-          title: Kaminen
-          message: Pelletsnivån är {{states('sensor.aduro_percentage_pellets_in_stove')}}%
-          enable_timeout: false
-          url: /lovelace/aduro
-          group: warning
-
-  - id: "aduro_shut_down_low_on_pellets"
-    alias: "Aduro shut down low on pellets"
-    mode: single
-    trigger:
-      - platform: numeric_state
-        entity_id: sensor.aduro_percentage_pellets_in_stove
-        below: input_number.aduro_shut_down_pellets_level
-    conditions:
-      - condition: template
-        value_template: "{{ states('sensor.aduro_percentage_pellets_in_stove') != 'unknown' }}"
-      - condition: state
-        entity_id: input_boolean.aduro_shut_down_at_specific_pellets_level
-        state: "on"
-    actions:
-      - action: script.actionable_notify
-        data:
-          who: all
-          title: Kaminen
-          message: Pelletsnivån är {{states('sensor.aduro_percentage_pellets_in_stove')}}%, vad vill du göra?.
-          show_confirm: true
-          show_dismiss: true
-          confirm_text: Stänga av
-          dismiss_text: Inget
-          action_confirm_action: input_boolean.turn_off
-          action_confirm_entity_id: input_boolean.aduro_start_stop
-          enable_timeout: true
-          timeout_fallback_action: input_boolean.turn_off
-          timeout_fallback_entity_id: input_boolean.aduro_start_stop
-          # action_taken_title: Title for notification when someone else takes action (default: 'Action Taken')
-          # action_taken_message: Message when someone else takes action (default: 'Another user has already taken action.')
-          # fallback_action_title: Title for timeout notification (default: 'Fallback Action Performed')
-          fallback_action_message: Kaminen stängs nu av.
-          url: /lovelace/aduro
-          group: warning
 
   - id: "aduro_reset_change_in_progress"
     alias: "Aduro reset change in progress status"
@@ -1091,7 +1116,7 @@ automation:
                   value: 1
               - action: automation.trigger
                 target:
-                  entity_id: automation.aduro_mqtt_anrop_trigger
+                  entity_id: automation.aduro_mqtt_call_trigger
 
           - conditions:
               - condition: state
@@ -1127,4 +1152,61 @@ automation:
                   value: 0
               - action: automation.trigger
                 target:
-                  entity_id: automation.aduro_mqtt_anrop_trigger
+                  entity_id: automation.aduro_mqtt_call_trigger
+
+#### NOTIFICATIONS ####
+
+  - id: "aduro_notification_low_on_pellets"
+    alias: "Aduro Notifications low on pellets"
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.aduro_percentage_pellets_in_stove
+        below: input_number.aduro_notification_pellets_level
+    conditions:
+      - condition: template
+        value_template: "{{ states('sensor.aduro_percentage_pellets_in_stove') != 'unknown' }}"
+    actions:
+      - action: script.actionable_notify
+        data:
+          who: all
+          title: Kaminen
+          message: Pelletsnivån är {{states('sensor.aduro_percentage_pellets_in_stove')}}%
+          enable_timeout: false
+          url: /lovelace/aduro
+          group: warning
+
+  - id: "aduro_shut_down_low_on_pellets"
+    alias: "Aduro shut down low on pellets"
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.aduro_percentage_pellets_in_stove
+        below: input_number.aduro_shut_down_pellets_level
+    conditions:
+      - condition: template
+        value_template: "{{ states('sensor.aduro_percentage_pellets_in_stove') != 'unknown' }}"
+      - condition: state
+        entity_id: input_boolean.aduro_shut_down_at_specific_pellets_level
+        state: "on"
+    actions:
+      - action: script.actionable_notify
+        data:
+          who: all
+          title: Kaminen
+          message: Pelletsnivån är {{states('sensor.aduro_percentage_pellets_in_stove')}}%, vad vill du göra?.
+          show_confirm: true
+          show_dismiss: true
+          confirm_text: Stänga av
+          dismiss_text: Inget
+          action_confirm_action: input_boolean.turn_off
+          action_confirm_entity_id: input_boolean.aduro_start_stop
+          enable_timeout: true
+          timeout_fallback_action: input_boolean.turn_off
+          timeout_fallback_entity_id: input_boolean.aduro_start_stop
+          # action_taken_title: Title for notification when someone else takes action (default: 'Action Taken')
+          # action_taken_message: Message when someone else takes action (default: 'Another user has already taken action.')
+          # fallback_action_title: Title for timeout notification (default: 'Fallback Action Performed')
+          fallback_action_message: Kaminen stängs nu av.
+          url: /lovelace/aduro
+          group: warning

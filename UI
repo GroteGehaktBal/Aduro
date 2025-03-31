@@ -56,8 +56,10 @@ views:
               rows: 1
           - type: custom:mushroom-template-card
             primary: >-
-              Rökgastemperatur: {{ states("sensor.aduro_h2_smoke_temperature") |
-              round(0)}} °C
+              Rökgastemperatur: {% if
+              is_number(states("sensor.aduro_h2_smoke_temperature")) %}{{
+              states("sensor.aduro_h2_smoke_temperature") | round(0)}} °C{% else
+              %}N/A{% endif %}
             secondary: ''
             icon: ''
             grid_options:
