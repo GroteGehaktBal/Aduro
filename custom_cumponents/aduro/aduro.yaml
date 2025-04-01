@@ -4,8 +4,7 @@ utility_meter:
     always_available: true
 
 counter:
-    aduro_pellets_refill_counter:
-    name: Aduro Pellets Refill Counter
+  aduro_pellets_refill_counter:
     initial: 0
     step: 1
     
