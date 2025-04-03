@@ -7,7 +7,7 @@ counter:
   aduro_pellets_refill_counter:
     initial: 0
     step: 1
-    
+
 timer:
   aduro_timer_startup_1:
     duration: "00:15:00"
@@ -151,7 +151,6 @@ template:
             Ved
           {% endif %}
 
-
   - sensor:
       - name: "Aduro mode transition"
         state: >
@@ -164,7 +163,6 @@ template:
           {% else %}
             idle
           {% endif %}
-
 
   - sensor:
       - name: "Aduro change in progress"
@@ -183,7 +181,7 @@ template:
             false
           {% endif %}
 
- # sensor to handle operation mode target during transition
+  # sensor to handle operation mode target during transition
   - sensor:
       - name: aduro_operation_mode_target
         state: >-
@@ -206,7 +204,7 @@ template:
         unit_of_measurement: "mode"
         state_class: measurement
 
- # sensor to handle operation temperature/heatlevel target during transition
+  # sensor to handle operation temperature/heatlevel target during transition
   - sensor:
       - name: aduro_display_target
         state: >-
@@ -408,7 +406,6 @@ sensor:
     unit_time: h
     time_window: "01:00:00"
 
-
 automation:
   - id: "aduro_mqtt_call"
     alias: "Aduro MQTT call"
@@ -600,7 +597,7 @@ automation:
       - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.aduro_start_stop
-      - dealay:
+      - delay:
           hours: 0
           minutes: 0
           seconds: 2
@@ -1153,7 +1150,52 @@ automation:
                 target:
                   entity_id: automation.aduro_mqtt_call_trigger
 
-#### NOTIFICATIONS ####
+  - id: "aduro_fallback_change_in_progress"
+    alias: "Aduro fallback change in progress"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.aduro_change_in_progress
+        to: "true"
+        for:
+          hours: 0
+          minutes: 1
+          seconds: 0
+    conditions: []
+    actions:
+      - repeat:
+          sequence:
+            - if:
+                - condition: state
+                  entity_id: sensor.aduro_operation_mode_target
+                  state: "0"
+              then:
+                - action: script.pyduro_set_heatlevel
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 5
+                    milliseconds: 0
+                - action: script.pyduro_set_operation_mode_heatlevel
+            - if:
+                - condition: state
+                  entity_id: sensor.aduro_operation_mode_target
+                  state: "1"
+              then:
+                - action: script.pyduro_set_temp
+                - delay:
+                    hours: 0
+                    minutes: 0
+                    seconds: 5
+                    milliseconds: 0
+                - action: script.pyduro_set_operation_mode_temp
+          while:
+            - condition: state
+              entity_id: sensor.aduro_change_in_progress
+              state: "true"
+
+  #### NOTIFICATIONS ####
 
   - id: "aduro_notification_low_on_pellets"
     alias: "Aduro Notifications low on pellets"
@@ -1207,5 +1249,42 @@ automation:
           # action_taken_message: Message when someone else takes action (default: 'Another user has already taken action.')
           # fallback_action_title: Title for timeout notification (default: 'Fallback Action Performed')
           fallback_action_message: Kaminen stängs nu av.
+          url: /lovelace/aduro
+          group: warning
+
+  - id: "aduro_notification_state"
+    alias: "Aduro Notifications state"
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id:
+          - sensor.aduro_h2_state
+        to: "13"
+      - trigger: state
+        entity_id:
+          - sensor.aduro_h2_state
+        to: "20"
+      - trigger: state
+        entity_id:
+          - sensor.aduro_h2_state
+        to: "28"
+      - trigger: state
+        entity_id:
+          - sensor.aduro_h2_state
+        to: "34"
+      - trigger: state
+        entity_id:
+          - sensor.aduro_mode_status_main
+        to: "{{ 'sensor.aduro_h2_state' }}"
+    conditions:
+      - condition: template
+        value_template: "{{ states('sensor.aduro_mode_status_main') != 'unavailable' }}"
+    actions:
+      - action: script.actionable_notify
+        data:
+          who: all
+          title: Status kamin
+          message: "{{states('sensor.aduro_mode_status_main')}} - {{states('sensor.aduro_mode_status_sub')}}"
+          enable_timeout: false
           url: /lovelace/aduro
           group: warning
