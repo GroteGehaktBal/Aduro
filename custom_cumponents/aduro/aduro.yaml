@@ -23,9 +23,6 @@ input_boolean:
   aduro_toggle_heat_target:
     name: Aduro toggle heat target
 
-  aduro_shut_down_at_specific_pellets_level:
-    name: Aduro shut down at specific pellets level
-
 input_number:
   aduro_heatlevel:
     name: Aduro heatlevel
