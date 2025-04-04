@@ -1,4 +1,4 @@
-# Aduro package
+# Aduro hybrid
 
 ## 0. Screen shot example
 ![Screenshot UI](https://github.com/NewImproved/Aduro/blob/main/UI.jpg)
