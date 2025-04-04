@@ -1,3 +1,4 @@
+# add following lines to your configuration.yaml to enable provided config files
 homeassistant:
   packages:
     aduro: !include custom_components/aduro/aduro.yaml
