@@ -67,7 +67,7 @@ The configuration includes actionable notifications to alert users about:
 
 Low pellet levels.
 Stove errors or warnings.
-State changes (e.g., startup, shutdown).
+State changes (mostly related to involuntary shutdown shutdown).
 Requires my actionable notification script to work without modification.
 
 ## 6. MQTT Integration
