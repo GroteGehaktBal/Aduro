@@ -45,7 +45,7 @@ The automations handle various events and actions related to the stove:
 
 ### State-Based Automations:
 
-Automatically turns the stove on/off based on its state.
+Automatically turns the stove input_boolean on/off based on the stoves state.
 Updates input values (e.g., heat level, boiler reference) when the stove's state changes (i.e. when aduros application is used).
 ### Mode Transitions:
 
