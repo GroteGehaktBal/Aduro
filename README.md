@@ -65,9 +65,9 @@ The configuration references scripts (e.g., pyduro_set_heatlevel, pyduro_set_tem
 ## 5. Notifications
 The configuration includes actionable notifications to alert users about:
 
-Low pellet levels.
-Stove errors or warnings.
-State changes (mostly related to involuntary shutdown shutdown).
+Low pellet levels.  
+Stove errors or warnings.  
+State changes (mostly related to involuntary shutdown shutdown).  
 Requires my actionable notification script to work without modification.
 
 ## 6. MQTT Integration
