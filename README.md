@@ -84,8 +84,9 @@ My aim is to calculate an aproximate time when the stove is going to run out of 
 ### Summary
 This YAML file is a comprehensive configuration for managing an Aduro stove in Home Assistant. It provides:
 
-Real-time monitoring of the stove's state, pellet levels, and operation mode.
-Automation of common tasks (e.g., starting/stopping the stove, switching modes).
-Notifications for critical events (e.g., low pellets, errors).
-Integration with MQTT for communication with the stove.
+* Real-time monitoring of the stove's state, pellet levels, and operation mode.
+* Automation of common tasks (e.g., starting/stopping the stove, switching modes).
+* Notifications for critical events (e.g., low pellets, errors).
+* Integration with MQTT for communication with the stove.
+
 This setup ensures efficient and automated control of the Aduro stove while keeping the user informed of its status.
