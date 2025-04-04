@@ -85,15 +85,15 @@ The conversion between the different states/sub states are not done. Many states
 
 My aim is to calculate an aproximate time when the stove is going to run out of pellets, but this will probably have to wait until next winter.
 ## 9. Prerequisites
-1. Follow instruction in https://github.com/SpaceTeddy/homeassistant_aduro_stove_control_python_scripts. Which includes installation of:
+1. You will need a MQTT-broker. I use Mosquitto broker.
+2. Follow instruction in https://github.com/SpaceTeddy/homeassistant_aduro_stove_control_python_scripts. Which includes installation of:
    * PythonScriptsPro (https://github.com/AlexxIT/PythonScriptsPro) for HA
    * pyduro (https://github.com/clementprevot/pyduro) as standard python library to get connection to the stove.
    * paho-mqtt (https://github.com/eclipse/paho.mqtt.python) library is required for python mqtt connectifity.  
-2. You will need a MQTT-broker. I use Mosquitto broker.
 3. I use Mushroom cards for the UI.
 4. Update your configuration with the files and/or lines in the files. I have included all my Aduro related files in this repository, some will be duplicates from the installations in first step. Some will have the same name, but with additional code. Some of the files will add to the original installation.
 5. If your setup differs from mine, you might have to change references in the scripts/files.
-6. For notifications/auto shutdown etc. to work without modification, use my actionable notification script (https://github.com/NewImproved/Actionable-notifications-script). If you want to modify the script, all notification automations are marked in the code.
+6. For notifications/auto shutdown etc. to work without modification, use my actionable notification script (https://github.com/NewImproved/Actionable-notifications-script). If you want to modify the script, all notification automations are located all the way down in aduro.yaml
 
 ### Summary
 This YAML file is a comprehensive configuration for managing an Aduro stove in Home Assistant. It provides:
