@@ -1,7 +1,7 @@
 # Aduro package
 
 ## 0. Screen shot example
-![Screenshot UI]([https://github.com/NewImproved/Aduro/UI.jpg](https://github.com/NewImproved/Aduro/blob/main/UI.jpg))
+![Screenshot UI](https://github.com/NewImproved/Aduro/blob/main/UI.jpg)
 
 The provided components defines various entities, sensors, automations, and scripts to manage and monitor the operation of an Aduro Hybrid stove. Here's a breakdown of its main functionality:
 
