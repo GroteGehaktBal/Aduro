@@ -49,7 +49,7 @@ Automatically turns the stove input_boolean on/off based on the stoves state.
 Updates input values (e.g., heat level, boiler reference) when the stove's state changes (i.e. when aduros application is used).
 ### Mode Transitions:
 
-Manages transitions between heat level and temperature modes.
+Manages and displays transitions between heat level and temperature modes.
 Updates sensors and triggers actions when mode changes occur.
 ### Notifications:
 
