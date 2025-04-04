@@ -1,4 +1,4 @@
-### Aduro
+# Aduro
 
 The provided YAML file is a configuration that defines various entities, sensors, automations, and scripts to manage and monitor the operation of an Aduro Hybrid stove. Here's a breakdown of its main functionality:
 
