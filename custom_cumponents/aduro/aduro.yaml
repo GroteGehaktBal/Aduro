@@ -23,6 +23,9 @@ input_boolean:
   aduro_toggle_heat_target:
     name: Aduro toggle heat target
 
+  aduro_shut_down_at_specific_pellets_level:
+    name: Aduro shut down at specific pellets level
+
 input_number:
   aduro_heatlevel:
     name: Aduro heatlevel
@@ -278,7 +281,7 @@ template:
           {%- if target == "heatlevel" -%}
             Heat Level (room temp.): {{ display_target_heatlevel }} ({{ boiler_temp }})°C
           {%- elif target == "temperature" -%}
-            Target (room temp.): {{ display_target }} ({{ boiler_temp }})°C
+            Target temp. (room temp.): {{ display_target }} ({{ boiler_temp }})°C
           {%- else -%}
             Wood Mode
           {%- endif -%}

@@ -1,11 +1,5 @@
-swipe_nav:
-  wrap: true
-  animate: swipe
-  enable_mouse_swipe: true
-  prevent_default: true
-  skip_hidden: true
-  swipe_amount: 30
-views:
+### This is the complete view displayed in the respitory. To use it, edit view in YAML.
+
   - type: sections
     path: aduro
     max_columns: 4
@@ -14,12 +8,17 @@ views:
     sections:
       - type: grid
         cards:
-          - type: custom:mushroom-template-card
-            primary: '{{states.sensor.aduro_mode_status_main.state}}'
-            secondary: '{{states.sensor.aduro_mode_status_sub.state}}'
-            icon: ''
+          - show_name: false
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+              confirmation:
+                text: Do you want to start/stop?
+            entity: input_boolean.aduro_start_stop
+            icon: mdi:power
             grid_options:
-              columns: 9
+              columns: 6
               rows: 1
           - show_name: false
             show_icon: true
@@ -27,11 +26,17 @@ views:
             tap_action:
               action: toggle
               confirmation:
-                text: Vill du starta/stänga av?
-            entity: input_boolean.aduro_start_stop
-            icon: mdi:power
+                text: Do you want to change mode?
+            entity: button.aduro_toggle_heat_target_button
             grid_options:
-              columns: 3
+              columns: 6
+              rows: 1
+          - type: custom:mushroom-template-card
+            primary: '{{states.sensor.aduro_mode_status_main.state}}'
+            secondary: '{{states.sensor.aduro_mode_status_sub.state}}'
+            icon: ''
+            grid_options:
+              columns: 12
               rows: 1
           - type: custom:mushroom-template-card
             primary: '{{ states(''sensor.aduro_display_format'') }}'
@@ -41,45 +46,20 @@ views:
               {% endif %}
             icon: ''
             grid_options:
-              columns: 9
-              rows: 1
-          - show_name: false
-            show_icon: true
-            type: button
-            tap_action:
-              action: toggle
-              confirmation:
-                text: Vill du ändra körläge?
-            entity: button.aduro_toggle_heat_target_button
-            grid_options:
-              columns: 3
+              columns: 12
               rows: 1
           - type: custom:mushroom-template-card
-            primary: >-
-              Rökgastemperatur: {% if
-              is_number(states("sensor.aduro_h2_smoke_temperature")) %}{{
+            primary: 'Smoke gas temperature:'
+            secondary: >-
+              {% if is_number(states("sensor.aduro_h2_smoke_temperature")) %}{{
               states("sensor.aduro_h2_smoke_temperature") | round(0)}} °C{% else
               %}N/A{% endif %}
-            secondary: ''
             icon: ''
             grid_options:
-              columns: 9
+              columns: 6
               rows: 1
             tap_action:
               action: more-info
-          - show_name: true
-            show_icon: false
-            type: button
-            tap_action:
-              action: toggle
-              confirmation:
-                text: Har du fyllt på kaminen?
-            entity: input_button.aduro_stove_refilled
-            show_state: false
-            grid_options:
-              columns: 3
-              rows: 1
-            name: Pellets refilled
           - type: custom:mushroom-template-card
             primary: >-
               {{states("sensor.aduro_percentage_pellets_in_stove")}}% pellets
@@ -89,21 +69,34 @@ views:
               cleaning
             icon: ''
             grid_options:
-              columns: 9
               rows: 1
+              columns: 6
           - show_name: true
             show_icon: false
             type: button
             tap_action:
               action: toggle
               confirmation:
-                text: Har du gjort rent kaminen?
+                text: Have you cleaned the stove?
             entity: input_button.aduro_stove_cleaned
             show_state: false
             grid_options:
-              columns: 3
+              columns: 6
               rows: 1
             name: Stove cleaned
+          - show_name: true
+            show_icon: false
+            type: button
+            tap_action:
+              action: toggle
+              confirmation:
+                text: Have you refilled the stove?
+            entity: input_button.aduro_stove_refilled
+            show_state: false
+            grid_options:
+              columns: 6
+              rows: 1
+            name: Pellets refilled
           - features:
               - type: numeric-input
                 style: buttons
@@ -136,18 +129,18 @@ views:
           - type: entities
             entities:
               - entity: input_number.aduro_notification_pellets_level
-                name: Nivå (%) för notifikation
+                name: Level (%) for notifikation
                 secondary_info: none
             show_header_toggle: false
           - type: entities
             entities:
               - entity: input_boolean.aduro_shut_down_at_specific_pellets_level
-                name: Stäng av kamin vid gränsvärde
-                icon: mdi:power
+                secondary_info: none
+                icon: ''
           - type: entities
             entities:
               - entity: input_number.aduro_shut_down_pellets_level
-                name: Nivå (%) för avstängning
+                name: Level (%) for shut down
             show_header_toggle: false
             grid_options:
               rows: 1
@@ -169,8 +162,8 @@ views:
               - entity: sensor.aduro_h2_consumption_day
               - entity: sensor.aduro_h2_consumption_yesterday
               - entity: sensor.aduro_h2_consumption_month
-              - entity: sensor.aduro_h2_consumption_total
-              - entity: sensor.aduro_forbrukad_mangd_pellets
+              - entity: sensor.aduro_h2_consumption_total_2
+              - entity: sensor.aduro_consumed_amount_of_pellets
               - entity: sensor.aduro_amount_of_pellets_in_stove
               - entity: sensor.aduro_percentage_pellets_in_stove
               - entity: sensor.aduro_consumption_pellets
