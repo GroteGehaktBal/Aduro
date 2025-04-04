@@ -1,6 +1,6 @@
 ### Aduro
 
-The provided YAML file is a configuration for a Home Assistant custom component named "Aduro." It defines various entities, sensors, automations, and scripts to manage and monitor the operation of an Aduro stove. Here's a breakdown of its main functionality:
+The provided YAML file is a configuration that defines various entities, sensors, automations, and scripts to manage and monitor the operation of an Aduro Hybrid stove. Here's a breakdown of its main functionality:
 
 ## 1. Entities
 The configuration defines several types of entities to interact with the Aduro stove:
