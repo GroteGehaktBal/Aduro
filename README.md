@@ -95,7 +95,7 @@ My aim is to calculate an aproximate time when the stove is going to run out of 
 5. If your setup differs from mine, you might have to change references in the scripts/files.
 6. For notifications/auto shutdown etc. to work without modification, use my actionable notification script (https://github.com/NewImproved/Actionable-notifications-script). If you want to modify the script, all notification automations are located all the way down in aduro.yaml
 
-### Summary
+## 10. Summary
 This YAML file is a comprehensive configuration for managing an Aduro stove in Home Assistant. It provides:
 
 * Real-time monitoring of the stove's state, pellet levels, and operation mode.
