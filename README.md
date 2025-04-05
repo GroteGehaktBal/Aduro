@@ -5,7 +5,7 @@ The provided components in the directory defines various entities, sensors, auto
 1. Temperature mode
 ![Screenshot UI](https://github.com/NewImproved/Aduro/blob/main/UI_2.jpg)
 
-2. Mode change
+2. Mode change to temperature mode
 ![Screenshot UI mode change](https://github.com/NewImproved/Aduro/blob/main/UI_3.jpg)
 
 ## 1. Entities
