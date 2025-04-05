@@ -10,10 +10,10 @@ counter:
 
 timer:
   aduro_timer_startup_1:
-    duration: "00:15:00"
+    duration: "00:14:30"
 
   aduro_timer_startup_2:
-    duration: "00:15:00"
+    duration: "00:14:30"
 
 input_boolean:
   aduro_start_stop:
