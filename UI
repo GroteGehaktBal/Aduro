@@ -162,7 +162,7 @@
               - entity: sensor.aduro_h2_consumption_day
               - entity: sensor.aduro_h2_consumption_yesterday
               - entity: sensor.aduro_h2_consumption_month
-              - entity: sensor.aduro_h2_consumption_total_2
+              - entity: sensor.aduro_h2_consumption_total
               - entity: sensor.aduro_consumed_amount_of_pellets
               - entity: sensor.aduro_amount_of_pellets_in_stove
               - entity: sensor.aduro_percentage_pellets_in_stove
