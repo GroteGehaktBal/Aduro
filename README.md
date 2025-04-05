@@ -1,5 +1,5 @@
 # Aduro hybrid
-The provided components in the directory defines various entities, sensors, automations, and scripts to manage and monitor the operation of an Aduro Hybrid stove in Home Assistant. Based out of work from [SpaceTeddy](https://github.com/SpaceTeddy) and [clementprevot](https://github.com/clementprevot).  
+The provided components in the directory defines various entities, sensors, automations, and scripts to manage and monitor the operation of an Aduro Hybrid stove in Home Assistant. Based out of work from [SpaceTeddy](https://github.com/SpaceTeddy/homeassistant_aduro_stove_control_python_scripts) and [clementprevot](https://github.com/clementprevot/pyduro).  
 Here's a breakdown of its main functionality:
 
 ## 0. Screen shot examples
