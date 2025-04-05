@@ -88,7 +88,7 @@ Sends notifications for specific error states (e.g., no fuel, failed ignition).
 The conversion between the different states/sub states are not done. Many states are not yet defined. The common ones (at least for me) are defined. The states that are defined are written in swedish in the code. These are not translated because I don't want the wording to be wrong.
 
 My aim is to calculate an aproximate time when the stove is going to run out of pellets, but this will probably have to wait until next winter.
-## 9. Prerequisites
+## 9. Installation
 1. You will need a MQTT-broker. I use Mosquitto broker.
 2. Follow instruction in https://github.com/SpaceTeddy/homeassistant_aduro_stove_control_python_scripts. Which includes installation of:
    * PythonScriptsPro (https://github.com/AlexxIT/PythonScriptsPro) for HA
