@@ -3,7 +3,7 @@ The provided components in the directory defines various entities, sensors, auto
 
 ## 0. Screen shot example
 ![Screenshot UI](https://github.com/NewImproved/Aduro/blob/main/UI.jpg)
-
+![test](UI.jpg)
 ## 1. Entities
 The configuration defines several types of entities to interact with the Aduro stove:
 
