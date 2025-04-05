@@ -138,19 +138,6 @@ sensor:
       {% endif %}
     #device_class: energy
 
-  - name: "Aduro H2 Consumption Total2"
-    unique_id: sensor.aduro_consumption_total_2
-    state_topic: "aduro_h2/status"
-    state_class: measurement
-    unit_of_measurement: "kg"
-    value_template: >-
-      {% if value_json is defined and value_json['STATUS'] is defined and value_json['STATUS']['consumption_total'] is defined %}
-        {{ value_json['STATUS']['consumption_total'] | float | round(0) }}
-      {% else %}
-        {{ states('sensor.aduro_consumption_total_2') }}
-      {% endif %}
-    #device_class: energy
-
   - name: "Aduro H2 Consumption Total"
     unique_id: sensor.aduro_consumption_total
     state_topic: "aduro_h2/status"
@@ -158,7 +145,7 @@ sensor:
     unit_of_measurement: "kg"
     value_template: >-
       {% if value_json is defined and value_json['STATUS'] is defined and value_json['STATUS']['consumption_total'] is defined %}
-        {{ (value_json['STATUS']['consumption_total'] | float + 500) | round(0) }}
+        {{ (value_json['STATUS']['consumption_total'] | float | round(0) }}
       {% else %}
         {{ states('sensor.aduro_consumption_total') }}
       {% endif %}
