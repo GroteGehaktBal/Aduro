@@ -68,7 +68,7 @@ The configuration includes actionable notifications to alert users about:
 Low pellet levels.  
 Stove errors or warnings.  
 State changes (mostly related to involuntary shutdown shutdown).  
-Notifications eequires my actionable notification script to work without modification, to work without modification.
+Notifications requires my actionable notification script to work without modification, to work without modification.
 
 ## 6. MQTT Integration
 The configuration includes automations to trigger MQTT calls to synchronize the stove's state with Home Assistant.
