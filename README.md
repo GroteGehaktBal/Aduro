@@ -1,8 +1,11 @@
 # Aduro hybrid
 The provided components in the directory defines various entities, sensors, automations, and scripts to manage and monitor the operation of an Aduro Hybrid stove in Home Assistant. Here's a breakdown of its main functionality:
 
-## 0. Screen shot example
-![Screenshot UI](https://github.com/NewImproved/Aduro/blob/main/UI_2.jpg)  
+## 0. Screen shot examples
+1.
+![Screenshot UI](https://github.com/NewImproved/Aduro/blob/main/UI_2.jpg)
+
+2. Mode change  
 ![Screenshot UI mode change](https://github.com/NewImproved/Aduro/blob/main/UI_3.jpg)
 
 ## 1. Entities
