@@ -148,7 +148,7 @@ template:
               {{ states('sensor.aduro_h2_stove_heatlevel') | round(0) }}
             {% endif %}
           {% else %}
-            Ved
+            wood
           {% endif %}
 
   - sensor:
@@ -307,6 +307,34 @@ template:
             false
           {% endif %}
 
+  - trigger:
+      - platform: time_pattern
+        seconds: "/1"
+    sensor:
+      - name: aduro_timer_startup_1_remaining
+        state: >
+          {% set t = 'timer.aduro_timer_startup_1' %}
+          {% set state = states(t) %}
+          {% set finish = state_attr(t, 'finishes_at') %}
+          {% set remain = state_attr(t, 'remaining') %}
+          {% set seconds = (as_timestamp(finish,0)-as_timestamp(now()))|int %}
+          {% set left = iif(finish == None,iif(remain == None,0,as_timedelta('0 ' ~remain).seconds),seconds) %}
+          {{ left| timestamp_custom('%M:%S', 0) }}
+
+  - trigger:
+      - platform: time_pattern
+        seconds: "/1"
+    sensor:
+      - name: aduro_timer_startup_2_remaining
+        state: >
+          {% set t = 'timer.aduro_timer_startup_2' %}
+          {% set state = states(t) %}
+          {% set finish = state_attr(t, 'finishes_at') %}
+          {% set remain = state_attr(t, 'remaining') %}
+          {% set seconds = (as_timestamp(finish,0)-as_timestamp(now()))|int %}
+          {% set left = iif(finish == None,iif(remain == None,0,as_timedelta('0 ' ~remain).seconds),seconds) %}
+          {{ left| timestamp_custom('%M:%S', 0) }}
+
   - button:
       - name: "Aduro toggle heat target button"
         icon: >
@@ -372,9 +400,9 @@ sensor:
           {% if state == '0' %}
             vänta
           {% elif state == '2' %}
-            Upptändning 1 ({{states('timer.aduro_timer_startup_1')}})
+            Upptändning 1 ({{ states('sensor.aduro_timer_startup_1_remaining') }})
           {% elif state == '4' %}
-            Upptändning 2 ({{states('timer.aduro_timer_startup_2')}})
+            Upptändning 2 ({{ states('sensor.aduro_timer_startup_2_remaining') }})
           {% elif state == '5' %}
             Normal
           {% elif state == '6' %}
