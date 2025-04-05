@@ -65,7 +65,7 @@ Requires my actionable notification script to work without modification.
 
 Handles fallback actions if changes (e.g., mode transitions) are not completed within a certain time.
 ## 4. Scripts
-The configuration references scripts (e.g., pyduro_set_heatlevel, pyduro_set_temp) to interact with the stove. These scripts likely send commands to the stove via MQTT or another protocol.
+The configuration references scripts (e.g., pyduro_set_heatlevel, pyduro_set_temp) to interact with the stove. These scripts are send commands to the stove via MQTT.
 
 ## 5. Notifications
 The configuration includes actionable notifications to alert users about:
