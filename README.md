@@ -95,7 +95,7 @@ My aim is to calculate an aproximate time when the stove is going to run out of 
    * pyduro (https://github.com/clementprevot/pyduro) as standard python library to get connection to the stove.
    * paho-mqtt (https://github.com/eclipse/paho.mqtt.python) library is required for python mqtt connectifity.  
 3. I use Mushroom cards for the UI.
-4. Update your configuration with the files and/or lines in the files. I have included all my Aduro related files in this repository, some will be duplicates from the installations in first step. Some will have the same name, but with additional code. Some of the files will add to the original installation.
+4. Update your configuration with the files and/or lines in the files. I have included all my Aduro related files in this repository, some will be duplicates from the installations in the second step. Some will have the same name, but with additional code. Some of the files will add to the original installation.
 5. If your setup differs from mine, you might have to change references in the scripts/files.
 6. For notifications/auto shutdown etc. to work without modification, use my actionable notification script (https://github.com/NewImproved/Actionable-notifications-script). If you want to modify the script, all notification automations are located all the way down in aduro.yaml
 
