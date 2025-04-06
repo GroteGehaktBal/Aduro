@@ -85,7 +85,7 @@ Automatically resets toggles and timers.
 Sends notifications for specific error states (e.g., no fuel, failed ignition).
 ## 8. Development needed
 
-The conversion between the different states/sub states are not done. Many states are not yet defined. The common ones (at least for me) are defined. The states that are defined are written in swedish in the code. These are not translated because I don't want the wording to be wrong.
+The conversion between the different states/sub states and different text strings are not done. Many states are not yet defined. The common ones (at least for me) are defined. The states that are defined are written in swedish in the code. These are not translated because I don't want the wording to be wrong.
 
 My aim is to calculate an aproximate time when the stove is going to run out of pellets, but this will probably have to wait until next winter.
 ## 9. Installation/usage
