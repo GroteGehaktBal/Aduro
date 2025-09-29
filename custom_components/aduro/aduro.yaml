@@ -1243,7 +1243,7 @@ automation:
           message: Pelletsnivån är {{states('sensor.aduro_percentage_pellets_in_stove')}}%
           enable_timeout: false
           url: /lovelace/aduro
-          group: warning
+          group: stove
 
   - id: "aduro_shut_down_low_on_pellets"
     alias: "Aduro shut down low on pellets"
@@ -1271,6 +1271,7 @@ automation:
           action_confirm_action: input_boolean.turn_off
           action_confirm_entity_id: input_boolean.aduro_start_stop
           enable_timeout: true
+          timeout_minutes_value: 15
           timeout_fallback_action: input_boolean.turn_off
           timeout_fallback_entity_id: input_boolean.aduro_start_stop
           # action_taken_title: Title for notification when someone else takes action (default: 'Action Taken')
@@ -1278,7 +1279,7 @@ automation:
           # fallback_action_title: Title for timeout notification (default: 'Fallback Action Performed')
           fallback_action_message: Kaminen stängs nu av.
           url: /lovelace/aduro
-          group: warning
+          group: stove
 
   - id: "aduro_notification_state"
     alias: "Aduro Notifications state"
@@ -1315,4 +1316,4 @@ automation:
           message: "{{states('sensor.aduro_mode_status_main')}} - {{states('sensor.aduro_mode_status_sub')}}"
           enable_timeout: false
           url: /lovelace/aduro
-          group: warning
+          group: stove
