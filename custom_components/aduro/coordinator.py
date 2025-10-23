@@ -102,12 +102,27 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
         """Get status data from the stove."""
         def get_status():
             try:
-                response = get.run(
+                from pyduro.actions import STATUS_PARAMS
+                
+                response = raw.run(
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
+                    function_id=11,
+                    payload="*"
                 )
-                return response.parse_payload()
+                
+                status = response.parse_payload().split(",")
+                
+                # Parse status into dictionary
+                status_dict = {}
+                i = 0
+                for key in STATUS_PARAMS:
+                    if i < len(status):
+                        status_dict[key] = status[i]
+                    i += 1
+                
+                return status_dict
             except Exception as e:
                 _LOGGER.error("Failed to get status: %s", e)
                 return {}
@@ -125,6 +140,7 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
+                    function_id=6,
                     payload="total_days"
                 )
                 
@@ -142,6 +158,7 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
+                    function_id=6,
                     payload="total_months"
                 )
                 
@@ -155,6 +172,7 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
+                    function_id=6,
                     payload="total_years"
                 )
                 

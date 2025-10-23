@@ -9,5 +9,5 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/GroteGehaktBal/Aduro/issues",
   "requirements": ["pyduro>=0.1.0", "paho-mqtt>=1.6.1"],
-  "version": "1.0.1"
+  "version": "1.0.2"
 }
