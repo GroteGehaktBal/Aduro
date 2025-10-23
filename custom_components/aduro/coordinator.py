@@ -259,8 +259,8 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
-                    path="start_stop",
-                    value="start",
+                    path="misc.start",
+                    value=1,
                 )
                 return response.parse_payload()
             except Exception as e:
@@ -278,8 +278,8 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
-                    path="start_stop",
-                    value="stop",
+                    path="misc.stop",
+                    value=1,
                 )
                 return response.parse_payload()
             except Exception as e:
