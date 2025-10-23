@@ -106,7 +106,6 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
-                    function_id=3,
                 )
                 return response.parse_payload()
             except Exception as e:
@@ -126,7 +125,6 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
-                    function_id=6,
                     payload="total_days"
                 )
                 
@@ -144,7 +142,6 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
-                    function_id=6,
                     payload="total_months"
                 )
                 
@@ -158,7 +155,6 @@ class AduroDataUpdateCoordinator(DataUpdateCoordinator):
                     burner_address=self.stove_ip,
                     serial=self.stove_serial,
                     pin_code=self.stove_pin,
-                    function_id=6,
                     payload="total_years"
                 )
                 
