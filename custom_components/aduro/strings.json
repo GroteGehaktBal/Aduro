@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Aduro Hybrid Stove",
+        "description": "Enter your Aduro stove credentials and MQTT broker details",
+        "data": {
+          "stove_serial": "Stove Serial Number",
+          "stove_pin": "Stove PIN Code",
+          "mqtt_host": "MQTT Broker Host",
+          "mqtt_port": "MQTT Broker Port",
+          "mqtt_username": "MQTT Username (optional)",
+          "mqtt_password": "MQTT Password (optional)",
+          "mqtt_base_path": "MQTT Base Path"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the stove. Please check your credentials and network connection.",
+      "unknown": "Unexpected error occurred"
+    },
+    "abort": {
+      "already_configured": "This stove is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Aduro Stove Options",
+        "description": "Update your MQTT settings",
+        "data": {
+          "mqtt_host": "MQTT Broker Host",
+          "mqtt_port": "MQTT Broker Port",
+          "mqtt_username": "MQTT Username",
+          "mqtt_password": "MQTT Password",
+          "mqtt_base_path": "MQTT Base Path"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Aduro Hybrid Stove",
+  "render_readme": true,
+  "domains": ["sensor", "switch", "number", "button"],
+  "iot_class": "Local Polling",
+  "homeassistant": "2024.1.0"
+}

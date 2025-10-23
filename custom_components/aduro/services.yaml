@@ -1,0 +1,54 @@
+set_heatlevel:
+  name: Set Heat Level
+  description: Set the heat level of the stove (1-3)
+  fields:
+    heatlevel:
+      name: Heat Level
+      description: Heat level to set (1=Low, 2=Medium, 3=High)
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 3
+          step: 1
+
+set_temperature:
+  name: Set Target Temperature
+  description: Set the target boiler reference temperature
+  fields:
+    temperature:
+      name: Temperature
+      description: Target temperature in degrees Celsius
+      required: true
+      selector:
+        number:
+          min: 5
+          max: 35
+          step: 1
+          unit_of_measurement: "°C"
+
+set_operation_mode:
+  name: Set Operation Mode
+  description: Set the operation mode of the stove
+  fields:
+    mode:
+      name: Mode
+      description: Operation mode (0=Heat Level, 1=Temperature, 2=Wood)
+      required: true
+      selector:
+        select:
+          options:
+            - label: "Heat Level Mode"
+              value: "0"
+            - label: "Temperature Mode"
+              value: "1"
+            - label: "Wood Mode"
+              value: "2"
+
+start_stove:
+  name: Start Stove
+  description: Start the pellet stove
+
+stop_stove:
+  name: Stop Stove
+  description: Stop the pellet stove
